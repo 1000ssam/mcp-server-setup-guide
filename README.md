@@ -25,21 +25,14 @@ Claude Desktop에 MCP(Model Context Protocol) 서버들을 연결하여 다양�
 1. GitHub → **Settings** → **Developer settings**
 2. **Personal access tokens** → **Tokens (classic)**
 3. **Generate new token** → **Generate new token (classic)**
-4. 다음 권한들을 **모두 체크**:
+4. 다음 **필수 권한들만** 체크 (보안을 위해 최소 권한):
    - `repo` (전체)
    - `workflow`
-   - `write:packages`
-   - `delete:packages`
-   - `admin:org`
-   - `admin:public_key`
-   - `admin:repo_hook`
-   - `admin:org_hook`
    - `gist`
-   - `notifications`
    - `user`
-   - `delete_repo`
-   - `write:discussion`
-   - `admin:enterprise`
+
+> ⚠️ **주의**: `delete_repo`, `admin:enterprise` 등 위험한 권한은 선택하지 마세요!
+
 5. **Generate token** → 토큰 복사
 
 #### 설정값:
@@ -209,6 +202,18 @@ PERPLEXITY_API_KEY: "pplx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 - `SLACK_CHANNEL_IDS`는 선택사항 (제거 가능)
 - Make URL은 전체 URL로 교체
 
+## 🔒 보안 주의사항
+
+### GitHub 토큰:
+- **최소 권한 원칙**: 필요한 권한만 부여
+- **위험한 권한 금지**: `delete_repo`, `admin:enterprise` 등 선택하지 마세요
+- **토큰 주기적 갱신**: 보안을 위해 정기적으로 새 토큰 생성
+
+### 기타 API 키들:
+- **환경변수로 관리**: 코드에 직접 입력하지 마세요
+- **접근 권한 제한**: 필요한 범위만 설정
+- **정기적 점검**: 사용하지 않는 토큰은 즉시 삭제
+
 ## 🎯 지원하는 기능들
 
 ### GitHub
@@ -242,8 +247,20 @@ PERPLEXITY_API_KEY: "pplx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 - AI 기반 웹 검색
 - 실시간 정보 조회
 
+## 🐛 문제 해결
+
+### 일반적인 문제들:
+1. **MCP 서버가 인식되지 않음**: Claude Desktop 재시작 필요
+2. **토큰 오류**: API 키 유효성 및 권한 확인
+3. **JSON 파싱 오류**: 문법 검사 및 이스케이프 문자 확인
+
+### 서버별 문제 해결:
+- **GitHub**: 토큰 권한 부족 시 필요한 scope 추가
+- **Notion**: Integration이 페이지에 연결되었는지 확인
+- **Slack**: Bot이 워크스페이스에 설치되었는지 확인
+
 ---
 
-**🚀 이제 Claude Desktop에서 모든 MCP 서버를 활용해보세요!**
+**🚀 이제 Claude Desktop에서 모든 MCP 서버를 안전하고 효율적으로 활용해보세요!**
 
 문제가 있거나 추가 도움이 필요하시면 이슈를 생성해주세요.
