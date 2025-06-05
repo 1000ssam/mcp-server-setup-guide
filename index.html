@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP 서버 설정 가이드</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .server-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .server-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .server-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .server-card h3 {
+            color: #5a67d8;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+        
+        .config-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #5a67d8;
+        }
+        
+        .config-section h3 {
+            color: #5a67d8;
+            margin-bottom: 15px;
+        }
+        
+        .steps {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .steps ol {
+            margin-left: 20px;
+        }
+        
+        .steps li {
+            margin: 8px 0;
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        
+        .code-block pre {
+            margin: 0;
+            font-family: 'Monaco', 'Consolas', monospace;
+        }
+        
+        .warning {
+            background: #fed7d7;
+            border: 1px solid #feb2b2;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning::before {
+            content: "⚠️ ";
+            font-weight: bold;
+        }
+        
+        .info {
+            background: #bee3f8;
+            border: 1px solid #90cdf4;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .info::before {
+            content: "💡 ";
+            font-weight: bold;
+        }
+        
+        .final-config {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #5a67d8, #667eea);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+            margin: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            text-decoration: none;
+            color: white;
+        }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .server-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 MCP 서버 설정 가이드</h1>
+            <p>Claude Desktop에서 모든 외부 서비스를 연결하세요</p>
+        </div>
+        
+        <div class="content">
+            <div class="info">
+                <strong>MCP(Model Context Protocol)</strong>란? Claude Desktop이 GitHub, Notion, Slack 등 다양한 외부 서비스와 직접 상호작용할 수 있게 해주는 프로토콜입니다.
+            </div>
+            
+            <h2>📋 지원하는 서버들</h2>
+            <div class="server-grid">
+                <div class="server-card">
+                    <h3>🐙 GitHub</h3>
+                    <p>코드 저장소 관리, 이슈/PR 관리, 파일 업로드</p>
+                </div>
+                <div class="server-card">
+                    <h3>📝 Notion</h3>
+                    <p>문서/데이터베이스 관리, 페이지 생성, 블록 조작</p>
+                </div>
+                <div class="server-card">
+                    <h3>💬 Slack</h3>
+                    <p>팀 커뮤니케이션, 메시지 송수신, 채널 관리</p>
+                </div>
+                <div class="server-card">
+                    <h3>🔄 Make</h3>
+                    <p>워크플로우 자동화, 서비스 연동</p>
+                </div>
+                <div class="server-card">
+                    <h3>🔥 Firecrawl</h3>
+                    <p>웹 크롤링, 구조화된 데이터 추출</p>
+                </div>
+                <div class="server-card">
+                    <h3>🔍 Perplexity</h3>
+                    <p>AI 기반 웹 검색, 실시간 정보 조회</p>
+                </div>
+            </div>
+            
+            <h2>🛠️ 기본 설정</h2>
+            <div class="config-section">
+                <h3>Claude Desktop 설정 파일 위치</h3>
+                <div class="steps">
+                    <strong>macOS:</strong> <code>~/Library/Application Support/Claude/claude_desktop_config.json</code><br>
+                    <strong>Windows:</strong> <code>%APPDATA%\\Claude\\claude_desktop_config.json</code>
+                </div>
+            </div>
+            
+            <h2>🔑 각 서버별 인증 설정</h2>
+            
+            <div class="config-section">
+                <h3>1. 🐙 GitHub Personal Access Token</h3>
+                <div class="steps">
+                    <h4>토큰 생성:</h4>
+                    <ol>
+                        <li>GitHub → <strong>Settings</strong> → <strong>Developer settings</strong></li>
+                        <li><strong>Personal access tokens</strong> → <strong>Tokens (classic)</strong></li>
+                        <li><strong>Generate new token</strong> → <strong>Generate new token (classic)</strong></li>
+                        <li>다음 <strong>필수 권한들만</strong> 체크 (보안을 위해 최소 권한):
+                            <ul>
+                                <li><code>repo</code> (전체)</li>
+                                <li><code>workflow</code></li>
+                                <li><code>gist</code></li>
+                                <li><code>user</code></li>
+                            </ul>
+                        </li>
+                        <li><strong>Generate token</strong> → 토큰 복사</li>
+                    </ol>
+                </div>
+                
+                <div class="warning">
+                    <strong>주의:</strong> <code>delete_repo</code>, <code>admin:enterprise</code> 등 위험한 권한은 선택하지 마세요!
+                </div>
+                
+                <div class="code-block">
+                    <pre>GITHUB_PERSONAL_ACCESS_TOKEN: "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"</pre>
+                </div>
+            </div>
+            
+            <div class="config-section">
+                <h3>2. 📝 Notion Integration Token</h3>
+                <div class="steps">
+                    <h4>Integration 생성:</h4>
+                    <ol>
+                        <li><a href="https://www.notion.so/my-integrations" target="_blank">Notion Developers</a> 접속</li>
+                        <li><strong>+ New integration</strong> 클릭</li>
+                        <li><strong>Name</strong> 입력 → <strong>Submit</strong></li>
+                        <li><strong>Internal Integration Token</strong> 복사 (<code>secret_</code>로 시작)</li>
+                    </ol>
+                    
+                    <h4>워크스페이스 연결:</h4>
+                    <ol>
+                        <li>사용할 Notion 페이지 우상단 <strong>⋯</strong> 클릭</li>
+                        <li><strong>Add connections</strong> → 생성한 Integration 선택</li>
+                    </ol>
+                </div>
+                
+                <div class="code-block">
+                    <pre>NOTION_API_KEY: "secret_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"</pre>
+                </div>
+            </div>
+            
+            <div class="config-section">
+                <h3>3. 💬 Slack Bot Token</h3>
+                <div class="steps">
+                    <h4>앱 생성:</h4>
+                    <ol>
+                        <li><a href="https://api.slack.com/apps" target="_blank">Slack API</a> → <strong>Create New App</strong></li>
+                        <li><strong>From scratch</strong> → 앱명/워크스페이스 설정</li>
+                    </ol>
+                    
+                    <h4>설정 방법:</h4>
+                    <ol>
+                        <li><strong>OAuth & Permissions</strong> 메뉴 진입</li>
+                        <li><strong>Bot Token Scopes</strong>에서 <strong>Add an OAuth Scope</strong> 클릭</li>
+                        <li>다음 권한들을 <strong>하나씩 개별적으로</strong> 추가:
+                            <ul>
+                                <li><code>channels:read</code></li>
+                                <li><code>channels:history</code></li>
+                                <li><code>groups:read</code></li>
+                                <li><code>groups:history</code></li>
+                                <li><code>chat:write</code></li>
+                                <li><code>users:read</code></li>
+                                <li><code>reactions:read</code></li>
+                            </ul>
+                        </li>
+                        <li><strong>Install to [워크스페이스명]</strong> 버튼 클릭 → <strong>Allow</strong></li>
+                        <li><strong>Bot User OAuth Token</strong> 복사 (<code>xoxb-</code>로 시작)</li>
+                    </ol>
+                    
+                    <h4>Team ID 확인:</h4>
+                    <ol>
+                        <li>웹 브라우저에서 슬랙 워크스페이스 접속</li>
+                        <li>URL에서 <code>T</code>로 시작하는 문자열 확인</li>
+                    </ol>
+                </div>
+                
+                <div class="code-block">
+                    <pre>https://app.slack.com/client/T09049C5C9G/C09049C70LS
+                          ↑ 이 부분이 Team ID</pre>
+                </div>
+                
+                <div class="code-block">
+                    <pre>SLACK_BOT_TOKEN: "xoxb-xxxxxxxxxxxx-xxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxx"
+SLACK_TEAM_ID: "T01234567"
+SLACK_CHANNEL_IDS: "C01234567,C76543210" (선택사항)</pre>
+                </div>
+            </div>
+            
+            <div class="config-section">
+                <h3>4. 🔄 Make.com MCP Token</h3>
+                <div class="steps">
+                    <ol>
+                        <li>Make.com 로그인 → 우상단 프로필 클릭</li>
+                        <li><strong>API</strong> → <strong>MCP Server</strong> 탭</li>
+                        <li><strong>Generate new token</strong> → 토큰명 입력</li>
+                        <li><strong>Token</strong>, <strong>Zone</strong> 확인</li>
+                    </ol>
+                </div>
+                
+                <div class="code-block">
+                    <pre>URL: "https://&lt;MAKE_ZONE&gt;/mcp/api/v1/u/&lt;MCP_TOKEN&gt;/sse"
+예시: "https://us1.make.com/mcp/api/v1/u/abc123token/sse"</pre>
+                </div>
+            </div>
+            
+            <div class="config-section">
+                <h3>5. 🔥 Firecrawl API Key</h3>
+                <div class="steps">
+                    <ol>
+                        <li><a href="https://firecrawl.dev" target="_blank">Firecrawl</a> 회원가입/로그인</li>
+                        <li>대시보드 → <strong>API Keys</strong> 메뉴</li>
+                        <li><strong>Create API Key</strong> → 키 복사</li>
+                    </ol>
+                </div>
+                
+                <div class="code-block">
+                    <pre>FIRECRAWL_API_KEY: "fc-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"</pre>
+                </div>
+            </div>
+            
+            <div class="config-section">
+                <h3>6. 🔍 Perplexity API Key</h3>
+                <div class="steps">
+                    <ol>
+                        <li><a href="https://www.perplexity.ai" target="_blank">Perplexity</a> 로그인</li>
+                        <li><strong>Settings</strong> → <strong>API</strong> → <strong>Generate</strong></li>
+                        <li>API 키 복사</li>
+                    </ol>
+                </div>
+                
+                <div class="code-block">
+                    <pre>PERPLEXITY_API_KEY: "pplx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"</pre>
+                </div>
+            </div>
+            
+            <h2>📁 최종 설정 파일</h2>
+            <div class="info">
+                아래 JSON을 <code>claude_desktop_config.json</code>에 붙여넣고 각 토큰을 교체하세요
+            </div>
+            
+            <div class="final-config">
+                <pre>{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "&lt;YOUR_GITHUB_PERSONAL_ACCESS_TOKEN&gt;"
+      }
+    },
+    "notionApi": {
+      "command": "npx",
+      "args": ["-y", "@notionhq/notion-mcp-server"],
+      "env": {
+        "OPENAPI_MCP_HEADERS": "{\\"Authorization\\": \\"Bearer &lt;YOUR_NOTION_API_KEY&gt;\\", \\"Notion-Version\\": \\"2022-06-28\\" }"
+      }
+    },
+    "slack": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-slack"],
+      "env": {
+        "SLACK_BOT_TOKEN": "&lt;YOUR_SLACK_BOT_TOKEN&gt;",
+        "SLACK_TEAM_ID": "&lt;YOUR_SLACK_TEAM_ID&gt;",
+        "SLACK_CHANNEL_IDS": "&lt;YOUR_SLACK_CHANNEL_IDS&gt;"
+      }
+    },
+    "make": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://&lt;MAKE_ZONE&gt;/mcp/api/v1/u/&lt;MCP_TOKEN&gt;/sse"
+      ]
+    },
+    "mcp-server-firecrawl": {
+      "command": "npx",
+      "args": ["-y", "firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "&lt;YOUR_FIRECRAWL_API_KEY&gt;"
+      }
+    },
+    "perplexity": {
+      "command": "npx",
+      "args": ["-y", "server-perplexity-ask"],
+      "env": {
+        "PERPLEXITY_API_KEY": "&lt;YOUR_PERPLEXITY_API_KEY&gt;"
+      }
+    }
+  }
+}</pre>
+            </div>
+            
+            <h2>🔧 설정 완료 후</h2>
+            <div class="steps">
+                <ol>
+                    <li><strong>Claude Desktop 재시작</strong></li>
+                    <li>새 채팅에서 "도구 목록 보여줘" 또는 MCP 서버 기능 테스트</li>
+                    <li>각 서버별 도구들이 정상적으로 표시되는지 확인</li>
+                </ol>
+            </div>
+            
+            <h2>🔒 보안 주의사항</h2>
+            <div class="warning">
+                <ul>
+                    <li><strong>최소 권한 원칙:</strong> 필요한 권한만 부여하세요</li>
+                    <li><strong>토큰 보안:</strong> API 키를 코드에 직접 입력하지 마세요</li>
+                    <li><strong>정기적 점검:</strong> 사용하지 않는 토큰은 즉시 삭제하세요</li>
+                </ul>
+            </div>
+            
+            <div style="text-align: center; margin: 40px 0;">
+                <a href="https://github.com/1000ssam/mcp-server-setup-guide" class="btn" target="_blank">
+                    📖 GitHub에서 자세히 보기
+                </a>
+                <a href="#" class="btn" onclick="window.print()">
+                    🖨️ 가이드 인쇄하기
+                </a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>🚀 이제 Claude Desktop에서 모든 MCP 서버를 활용해보세요!</p>
+            <p>문제가 있거나 추가 도움이 필요하시면 GitHub 이슈를 생성해주세요.</p>
+        </div>
+    </div>
+</body>
+</html>
