@@ -143,6 +143,19 @@
             font-weight: bold;
         }
         
+        .reference {
+            background: #e6fffa;
+            border: 1px solid #81e6d9;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .reference::before {
+            content: "📚 ";
+            font-weight: bold;
+        }
+        
         .final-config {
             background: #1a202c;
             color: #e2e8f0;
@@ -200,6 +213,14 @@
         <div class="content">
             <div class="info">
                 <strong>MCP(Model Context Protocol)</strong>란? Claude Desktop이 GitHub, Notion, Slack 등 다양한 외부 서비스와 직접 상호작용할 수 있게 해주는 프로토콜입니다.
+            </div>
+
+            <div class="reference">
+                <strong>더 많은 MCP 서버를 찾고 계신가요?</strong><br>
+                공식 MCP 서버 목록에서 다양한 서버들을 확인하세요: 
+                <a href="https://github.com/modelcontextprotocol/servers" target="_blank" style="color: #2b6cb0; font-weight: bold;">
+                    📚 MCP 공식 서버 리스트
+                </a>
             </div>
             
             <h2>📋 지원하는 서버들</h2>
@@ -406,7 +427,7 @@ SLACK_CHANNEL_IDS: "C01234567,C76543210" (선택사항)</pre>
       "command": "npx",
       "args": ["-y", "@notionhq/notion-mcp-server"],
       "env": {
-        "OPENAPI_MCP_HEADERS": "{\\"Authorization\\": \\"Bearer &lt;YOUR_NOTION_API_KEY&gt;\\", \\"Notion-Version\\": \\"2022-06-28\\" }"
+        "OPENAPI_MCP_HEADERS": "{\\\"Authorization\\\": \\\"Bearer &lt;YOUR_NOTION_API_KEY&gt;\\\", \\\"Notion-Version\\\": \\\"2022-06-28\\\" }"
       }
     },
     "slack": {
@@ -465,6 +486,9 @@ SLACK_CHANNEL_IDS: "C01234567,C76543210" (선택사항)</pre>
             <div style="text-align: center; margin: 40px 0;">
                 <a href="https://github.com/1000ssam/mcp-server-setup-guide" class="btn" target="_blank">
                     📖 GitHub에서 자세히 보기
+                </a>
+                <a href="https://github.com/modelcontextprotocol/servers" class="btn" target="_blank">
+                    📚 MCP 공식 서버 리스트
                 </a>
                 <a href="#" class="btn" onclick="window.print()">
                     🖨️ 가이드 인쇄하기
